@@ -4,12 +4,15 @@ const { sequelize } = require('./models');
 
 const authRoutes = require('./routes/auth');
 const packageRoutes = require('./routes/package');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swaggerSpec');
 
 const app = express();
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/packages', packageRoutes);
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 sequelize.sync({ alter: true }).then(() => {
   console.log('Database synced');

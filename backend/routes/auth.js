@@ -5,6 +5,30 @@ const { User } = require('../models');
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User registered
+ */
 router.post('/register', async (req, res) => {
   const { email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
@@ -12,6 +36,38 @@ router.post('/register', async (req, res) => {
   res.json(user);
 });
 
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: User login to get JWT token
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       description: User credentials
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Returns JWT token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       401:
+ *         description: Invalid credentials
+ */
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ where: { email } });
