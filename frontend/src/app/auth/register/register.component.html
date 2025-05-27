@@ -1,0 +1,45 @@
+<div class="register-container">
+  <h2>Register</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="reg-username">Username:</label>
+      <input id="reg-username" type="text" formControlName="username" />
+      <div *ngIf="registerForm.get('username')?.invalid && (registerForm.get('username')?.dirty || registerForm.get('username')?.touched)" class="error-message">
+        Username is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="reg-email">Email:</label>
+      <input id="reg-email" type="email" formControlName="email" />
+      <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)" class="error-message">
+        <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required.</span>
+        <span *ngIf="registerForm.get('email')?.errors?.['email']">Enter a valid email.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="reg-password">Password:</label>
+      <input id="reg-password" type="password" formControlName="password" />
+      <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)" class="error-message">
+        <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required.</span>
+        <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="reg-confirm-password">Confirm Password:</label>
+      <input id="reg-confirm-password" type="password" formControlName="confirmPassword" />
+      <div *ngIf="registerForm.get('confirmPassword')?.invalid && (registerForm.get('confirmPassword')?.dirty || registerForm.get('confirmPassword')?.touched)" class="error-message">
+        Confirm Password is required.
+      </div>
+      <div *ngIf="registerForm.errors?.['mismatch'] && (registerForm.get('confirmPassword')?.dirty || registerForm.get('confirmPassword')?.touched)" class="error-message">
+        Passwords do not match.
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="!registerForm.valid">Register</button>
+  </form>
+
+  <p>Already have an account? <a [routerLink]="['/login']">Login here</a></p>
+</div>
